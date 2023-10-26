@@ -1,4 +1,5 @@
 scalar NonNegativeInt
+scalar Url
 
 scalar DateTime
 type User {
@@ -8,10 +9,8 @@ type User {
     avatar: Url
     createDateTime: DateTime!
     displayName: String
-    #    problems: [Problem!]
+    problems: [Problem!]
 }
-
-scalar Url
 
 type Problem implements SearchableItem {
     id: ID!
@@ -108,4 +107,25 @@ type SolutionResponse {
 
 type UserActivationResponse {
     isActive: Boolean!
+}
+
+type Query{
+    me: User!
+    problemLatestList: [Problem!]
+    itemSearch(filter: SearchItemFilter): [SearchableItem]
+    problemDetails(id: ID!): Problem!
+}
+
+type Mutation {
+    userCreate(user: UserCreateInput): UserResponse!
+    userLogin(user: UserLoginInput!): UserResponse!
+    userActivation(user: UserActivationInput!): UserActivationResponse
+    problemCreate(problem: ProblemCreateInput!): ProblemResponse
+    solutionCreate(solution: SolutionCreateInput): SolutionResponse
+    solutionVote(vote:SolutionVoteInput!): SolutionResponse!
+}
+
+type Subscription {
+    problemAdded: Problem!
+    solutionVoteChanged(solutionId: ID!):Solution!
 }
